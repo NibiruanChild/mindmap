@@ -10,6 +10,9 @@
       :min-zoom="0.1"
       :max-zoom="2"
     >
+      <template #node-mindmap="nodeProps">
+        <MindMapNodeComponent v-bind="nodeProps" />
+      </template>
       <Background pattern-color="#aaa" :gap="16" />
       <Controls />
       <MiniMap :node-color="getNodeColor" mask-color="rgba(0, 0, 0, 0.1)" />
@@ -25,6 +28,7 @@ import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
 import type { Node, Edge } from '@vue-flow/core'
 import type { MindMapNode } from '../types'
+import MindMapNodeComponent from './MindMapNode.vue'
 
 const props = defineProps<{
   rootNodes: MindMapNode[]
@@ -88,7 +92,7 @@ function calculateNodePositions(
 
     const flowNode: Node = {
       id: node.id,
-      type: 'default',
+      type: 'mindmap',
       position: { x, y },
       data: {
         label: `<div class="mindmap-node mindmap-node-${node.type}">
@@ -107,6 +111,16 @@ function calculateNodePositions(
         color: NODE_TEXT_COLORS[node.type] || '#FFFFFF',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
         transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+        text: node.text,
+        type: node.type
+      },
+      style: {
+        background: NODE_COLORS[node.type] || '#95a5a6',
+        border: '2px solid #2c3e50',
+        borderRadius: '8px',
+        width: `${NODE_WIDTH}px`,
+        color: '#2c3e50',
+        padding: '0'
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left
