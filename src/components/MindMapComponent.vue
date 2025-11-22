@@ -10,6 +10,9 @@
       :min-zoom="0.1"
       :max-zoom="2"
     >
+      <template #node-mindmap="nodeProps">
+        <MindMapNodeComponent v-bind="nodeProps" />
+      </template>
       <Background pattern-color="#aaa" :gap="16" />
       <Controls />
       <MiniMap :node-color="getNodeColor" mask-color="rgba(0, 0, 0, 0.1)" />
@@ -25,6 +28,7 @@ import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
 import type { Node, Edge } from '@vue-flow/core'
 import type { MindMapNode } from '../types'
+import MindMapNodeComponent from './MindMapNode.vue'
 
 const props = defineProps<{
   rootNodes: MindMapNode[]
@@ -76,23 +80,19 @@ function calculateNodePositions(
 
     const flowNode: Node = {
       id: node.id,
-      type: 'default',
+      type: 'mindmap',
       position: { x, y },
       data: {
-        label: `<div class="mindmap-node mindmap-node-${node.type}">
-                 <div class="mindmap-node-type">${node.type.toUpperCase()}</div>
-                 <div class="mindmap-node-text">${node.text}</div>
-               </div>`,
+        text: node.text,
         type: node.type
       },
       style: {
         background: NODE_COLORS[node.type] || '#95a5a6',
         border: '2px solid #2c3e50',
         borderRadius: '8px',
-        padding: '10px',
         width: `${NODE_WIDTH}px`,
-        fontSize: '12px',
-        color: '#2c3e50'
+        color: '#2c3e50',
+        padding: '0'
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left
@@ -173,31 +173,5 @@ watch(
 
 :deep(.vue-flow) {
   flex: 1;
-}
-
-:deep(.mindmap-node) {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-:deep(.mindmap-node-type) {
-  font-size: 9px;
-  font-weight: bold;
-  opacity: 0.7;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-:deep(.mindmap-node-text) {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.3;
-  word-break: break-word;
-}
-
-:deep(.mindmap-node-header .mindmap-node-text) {
-  font-weight: bold;
-  font-size: 14px;
 }
 </style>
