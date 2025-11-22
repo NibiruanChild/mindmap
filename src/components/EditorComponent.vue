@@ -101,6 +101,7 @@ onBeforeUnmount(() => {
   flex: 1;
   overflow: auto;
   padding: 20px;
+  padding-left: 60px;
 }
 
 :deep(.ce-block__content) {
