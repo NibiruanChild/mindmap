@@ -1,10 +1,8 @@
-import { useEffect } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
@@ -47,22 +45,12 @@ interface OnChangePluginWrapperProps {
 }
 
 function OnChangePluginWrapper({ onChange }: OnChangePluginWrapperProps) {
-  const [editor] = useLexicalComposerContext();
-
   const handleChange = (editorState: EditorState) => {
     editorState.read(() => {
       const parsedContent = parseEditorContent();
       onChange(parsedContent);
     });
   };
-
-  useEffect(() => {
-    // Initial parse
-    editor.update(() => {
-      const parsedContent = parseEditorContent();
-      onChange(parsedContent);
-    });
-  }, [editor, onChange]);
 
   return <OnChangePlugin onChange={handleChange} />;
 }

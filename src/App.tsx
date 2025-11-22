@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Editor from './components/Editor';
 import MindMap from './components/MindMap';
 import type { ParsedContent } from './types';
@@ -10,9 +10,9 @@ function App() {
     rootNodes: [],
   });
 
-  const handleEditorChange = (content: ParsedContent) => {
+  const handleEditorChange = useCallback((content: ParsedContent) => {
     setParsedContent(content);
-  };
+  }, []);
 
   return (
     <div className="app">
