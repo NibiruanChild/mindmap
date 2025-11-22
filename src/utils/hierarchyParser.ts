@@ -2,6 +2,21 @@ import type { MindMapNode, ParsedContent, EditorBlock } from '../types'
 
 let nodeIdCounter = 0
 
+function cleanText(html: string): string {
+  // Remove all HTML tags
+  let text = html.replace(/<[^>]*>/g, '')
+  // Decode HTML entities
+  text = text
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+  // Trim whitespace
+  return text.trim()
+}
+
 export function parseEditorData(blocks: EditorBlock[]): ParsedContent {
   nodeIdCounter = 0
   const allNodes: MindMapNode[] = []
@@ -10,7 +25,7 @@ export function parseEditorData(blocks: EditorBlock[]): ParsedContent {
   function createNode(text: string, type: MindMapNode['type'], level: number): MindMapNode {
     return {
       id: `node-${nodeIdCounter++}`,
-      text,
+      text: cleanText(text),
       level,
       type,
       children: []
@@ -39,7 +54,7 @@ export function parseEditorData(blocks: EditorBlock[]): ParsedContent {
       const text = block.data.text || ''
 
       if (text.trim()) {
-        const headingNode = createNode(text.replace(/<[^>]*>/g, ''), 'header', level)
+        const headingNode = createNode(text, 'header', level)
         addNodeToHierarchy(headingNode)
       }
     } else if (block.type === 'paragraph') {
@@ -47,7 +62,7 @@ export function parseEditorData(blocks: EditorBlock[]): ParsedContent {
 
       if (text.trim()) {
         const level = stack.length > 0 ? stack[stack.length - 1]!.level + 1 : 7
-        const paragraphNode = createNode(text.replace(/<[^>]*>/g, ''), 'paragraph', level)
+        const paragraphNode = createNode(text, 'paragraph', level)
         addNodeToHierarchy(paragraphNode)
       }
     } else if (block.type === 'list') {
@@ -56,7 +71,7 @@ export function parseEditorData(blocks: EditorBlock[]): ParsedContent {
 
       items.forEach((item) => {
         if (item.trim()) {
-          const listItemNode = createNode(item.replace(/<[^>]*>/g, ''), 'list', baseLevel)
+          const listItemNode = createNode(item, 'list', baseLevel)
           addNodeToHierarchy(listItemNode)
         }
       })

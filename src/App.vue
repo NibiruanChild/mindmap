@@ -31,32 +31,12 @@ function handleEditorChange(content: ParsedContent) {
 }
 </script>
 
-<style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#app {
-  width: 100%;
-  height: 100vh;
-}
-
+<style scoped>
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: hidden;
 }
