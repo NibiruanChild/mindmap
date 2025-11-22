@@ -40,16 +40,33 @@ export default function MindMap({ rootNodes }: MindMapProps) {
   const calculateNodePositions = useCallback(
     (
       nodes: MindMapNode[],
-      parentY = 0,
+      startY = 0,
       depth = 0
-    ): { nodes: Node[]; edges: Edge[]; maxY: number } => {
+    ): { nodes: Node[]; edges: Edge[]; height: number } => {
       const flowNodes: Node[] = [];
       const flowEdges: Edge[] = [];
-      let currentY = parentY;
+      let totalHeight = 0;
 
       nodes.forEach((node) => {
         const x = depth * HORIZONTAL_SPACING;
-        const y = currentY;
+
+        // Рекурсивно обрабатываем детей чтобы узнать их высоту
+        let childrenResult = null;
+        if (node.children.length > 0) {
+          childrenResult = calculateNodePositions(
+            node.children,
+            0, // временное значение, обновим позже
+            depth + 1
+          );
+        }
+
+        // Рассчитываем высоту текущего узла с учетом детей
+        const nodeHeight = childrenResult
+          ? Math.max(VERTICAL_SPACING, childrenResult.height)
+          : VERTICAL_SPACING;
+
+        // Позиция текущего узла - в центре его детей или просто по порядку
+        const y = startY + totalHeight + (nodeHeight - VERTICAL_SPACING) / 2;
 
         const flowNode: Node = {
           id: node.id,
@@ -89,22 +106,22 @@ export default function MindMap({ rootNodes }: MindMapProps) {
           });
         }
 
-        if (node.children.length > 0) {
-          const childResult = calculateNodePositions(
-            node.children,
-            currentY,
-            depth + 1
-          );
+        // Добавляем детей с правильными позициями
+        if (childrenResult) {
+          // Обновляем Y позиции детей
+          const childStartY = startY + totalHeight;
+          childrenResult.nodes.forEach((childNode) => {
+            childNode.position.y += childStartY;
+          });
 
-          flowNodes.push(...childResult.nodes);
-          flowEdges.push(...childResult.edges);
-          currentY = childResult.maxY;
-        } else {
-          currentY += VERTICAL_SPACING;
+          flowNodes.push(...childrenResult.nodes);
+          flowEdges.push(...childrenResult.edges);
         }
+
+        totalHeight += nodeHeight;
       });
 
-      return { nodes: flowNodes, edges: flowEdges, maxY: currentY };
+      return { nodes: flowNodes, edges: flowEdges, height: totalHeight };
     },
     []
   );

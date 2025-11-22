@@ -12,7 +12,10 @@ import type { EditorState } from 'lexical';
 import { parseEditorContent } from '../utils/hierarchyParser';
 import type { ParsedContent } from '../types';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
-import DraggablePlugin from './plugins/DraggablePlugin';
+// import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
+import TabIndentationPlugin from './plugins/TabIndentationPlugin';
+import MarkdownShortcutsPlugin from './plugins/MarkdownShortcutsPlugin';
+// import SlashCommandPlugin from './plugins/SlashCommandPlugin';
 import './Editor.css';
 
 const theme = {
@@ -80,7 +83,8 @@ export default function Editor({ onChange }: EditorProps) {
               contentEditable={<ContentEditable className="editor-input" />}
               placeholder={
                 <div className="editor-placeholder">
-                  Start typing... Use headings (H1-H6), paragraphs, and lists to create your mindmap
+                  Start typing... Use headings (H1-H6), paragraphs, and lists to create your mindmap.
+                  Try markdown shortcuts like "# " for headings or use Tab for indentation!
                 </div>
               }
               ErrorBoundary={LexicalErrorBoundary}
@@ -88,7 +92,8 @@ export default function Editor({ onChange }: EditorProps) {
             <AutoFocusPlugin />
             <HistoryPlugin />
             <ListPlugin />
-            <DraggablePlugin />
+            <TabIndentationPlugin />
+            <MarkdownShortcutsPlugin />
             <OnChangePluginWrapper onChange={onChange} />
           </div>
         </div>
