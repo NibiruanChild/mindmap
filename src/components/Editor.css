@@ -30,6 +30,12 @@
   caret-color: rgb(5, 5, 5);
 }
 
+.editor-input[contenteditable="true"] {
+  cursor: text;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 .editor-placeholder {
   color: #999;
   overflow: hidden;

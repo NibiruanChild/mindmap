@@ -7,6 +7,7 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
+import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { ListNode, ListItemNode } from '@lexical/list';
 import type { EditorState } from 'lexical';
@@ -74,6 +75,7 @@ export default function Editor({ onChange }: EditorProps) {
   const initialConfig = {
     namespace: 'MindMapEditor',
     theme,
+    editable: true,
     onError: (error: Error) => {
       console.error(error);
     },
@@ -95,6 +97,7 @@ export default function Editor({ onChange }: EditorProps) {
               }
               ErrorBoundary={LexicalErrorBoundary}
             />
+            <AutoFocusPlugin />
             <HistoryPlugin />
             <ListPlugin />
             <DraggablePlugin />
