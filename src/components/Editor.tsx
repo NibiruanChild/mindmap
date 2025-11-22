@@ -8,14 +8,14 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { ListNode, ListItemNode } from '@lexical/list';
+import { LinkNode } from '@lexical/link';
+import { CodeNode } from '@lexical/code';
 import type { EditorState } from 'lexical';
 import { parseEditorContent } from '../utils/hierarchyParser';
 import type { ParsedContent } from '../types';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
-// import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
 import TabIndentationPlugin from './plugins/TabIndentationPlugin';
 import MarkdownShortcutsPlugin from './plugins/MarkdownShortcutsPlugin';
-// import SlashCommandPlugin from './plugins/SlashCommandPlugin';
 import './Editor.css';
 
 const theme = {
@@ -70,7 +70,7 @@ export default function Editor({ onChange }: EditorProps) {
     onError: (error: Error) => {
       console.error(error);
     },
-    nodes: [HeadingNode, ListNode, ListItemNode, QuoteNode],
+    nodes: [HeadingNode, ListNode, ListItemNode, QuoteNode, LinkNode, CodeNode],
   };
 
   return (
